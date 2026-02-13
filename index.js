@@ -17,6 +17,7 @@ app.use(express.json());
 app.use(require("./routes/auth.routes"));
 app.use(require("./routes/user.routes"));
 app.use(require("./routes/category.routes"))
+app.use(require('./routes/transaction.routes'));
 
 app.get("/", (req, res) => {
     res.send("Fintrack Server is Running");
