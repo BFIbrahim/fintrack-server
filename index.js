@@ -20,6 +20,7 @@ app.use(require("./routes/category.routes"))
 app.use(require('./routes/transaction.routes'));
 app.use(require('./routes/goal.route'));
 app.use(require('./routes/analytics.route'))
+app.use(require("./routes/admin.routes"));
 
 app.get("/", (req, res) => {
     res.send("Fintrack Server is Running");
