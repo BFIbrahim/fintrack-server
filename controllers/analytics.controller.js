@@ -61,3 +61,32 @@ exports.getSmartInsights = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 };
+
+exports.getDashboardSummary = async (req, res) => {
+    try {
+        const userId = new mongoose.Types.ObjectId(req.user.id);
+
+        const stats = await Transaction.aggregate([
+            { $match: { userId } },
+            { $group: {
+                _id: "$type",
+                total: { $sum: "$amount" }
+            }}
+        ]);
+
+        const income = stats.find(s => s._id === 'income')?.total || 0;
+        const expense = stats.find(s => s._id === 'expense')?.total || 0;
+        const balance = income - expense;
+
+        const recentTransactions = await Transaction.find({ userId })
+            .sort({ date: -1 })
+            .limit(5);
+
+        res.status(200).json({
+            summary: { income, expense, balance },
+            recentTransactions
+        });
+    } catch (error) {
+        res.status(500).json({ message: "Dashboard data fetch failed", error: error.message });
+    }
+};
