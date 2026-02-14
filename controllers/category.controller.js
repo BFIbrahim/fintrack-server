@@ -1,11 +1,9 @@
 const Category = require('../models/Category.model');
 
-// Create a new category
 exports.createCategory = async (req, res) => {
     try {
         const { name, type } = req.body;
 
-        // Check if category already exists
         const existingCategory = await Category.findOne({ name: name.trim() });
         if (existingCategory) {
             return res.status(400).json({ message: "Category already exists" });
@@ -20,7 +18,6 @@ exports.createCategory = async (req, res) => {
     }
 };
 
-// Get all categories (accessible by users to fill dropdowns)
 exports.getAllCategories = async (req, res) => {
     try {
         const categories = await Category.find().sort({ name: 1 });
@@ -30,7 +27,6 @@ exports.getAllCategories = async (req, res) => {
     }
 };
 
-// Delete a category
 exports.deleteCategory = async (req, res) => {
     try {
         await Category.findByIdAndDelete(req.params.id);
